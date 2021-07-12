@@ -10,7 +10,7 @@ const exerciseSchema = new Schema({
   },
   name: {
     type: String,
-    trim: true;
+    trim: true,
     required: "Enter a name this exercise"
   },
   duration: {
