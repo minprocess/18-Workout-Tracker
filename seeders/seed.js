@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const db = require('../models/workout.js');
 
 // workout is the database name
-mongoose.connect('mongodb://localhost/workout', {
+mongoose.connect('mongodb://localhost/workoutdb', {
   useNewUrlParser: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
