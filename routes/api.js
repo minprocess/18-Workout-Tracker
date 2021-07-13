@@ -1,14 +1,10 @@
-/*
-Post, Put and Delete actions go here
-From workout.js
-.get('/exercise')
-.get('/exercise')
-*/
+
 const router = require("express").Router();
 const Workout = require("../models/workout");
 
+// total duration of all workouts
 router.get("/api/workouts", (req, res) => {
-  console.log("/api/workouts")
+  console.log("/api/workouts");
   Workout.aggregate([
     {
       $addFields: { 
@@ -20,6 +16,8 @@ router.get("/api/workouts", (req, res) => {
   ])
 //    .sort({ date: -1 })
     .then(dbWorkout => {
+      console.log("/api/workouts .then");
+      console.log(dbWorkout);
       res.json(dbWorkout);
     })
     .catch(err => {
