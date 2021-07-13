@@ -1,0 +1,1 @@
+heroku run node seeders/seed.js
