@@ -2,47 +2,31 @@
 const router = require("express").Router();
 const Workout = require("../models/workout");
 
-// total duration of all workouts
-router.get("/api/workout", (req, res) => {
-  console.log(".get/api/workout")
-  Workout.aggregate([
-    {
-      $addFields: { 
-        totalDuration: {
-          $sum: "$exercises.duration"
+// Latest workout which will be the last one in the database
+router.get("/api/workouts", (req, res) => {
+  Workout
+    .aggregate([
+      { $sort: {day: -1} },
+      { $limit: 1 },
+      {
+        $addFields: { 
+          totalDuration: { $sum: "$exercises.duration" }
         }
       }
-    }
-  ])
-//    .sort({ date: -1 })
+    ])
     .then(dbWorkout => {
-      console.log("/api/workouts .then");
-      console.log(dbWorkout);
       res.json(dbWorkout);
     })
     .catch(err => {
       res.status(400).json(err);
     });
 });
-/*
-let getLastCreatedBookmarks = async (userId) => {
-  const bookmarks = await Bookmark.find({userId: userId})
-    //first, they are sorting by the field they want
-    .sort({createdAt: -1}) // -1 for descending sort
-    /// and limiting that to a specific number of results
-    .limit(30);
 
-  return bookmarks;
-};
-*/
-// TODO
-// 2nd .get for last 7 workouts aggregate
-// "/api/workouts/range"
+// For last 7 workouts get the total duration of each workout
 router.get("/api/workouts/range", (req, res) => {
-  console.log(".get('api/workouts/range'")
   Workout.aggregate([
-    { $sort : {day: -1} },
-    { $limit : 7 },
+    { $sort: {day: -1} },
+    { $limit: 7 },
     {
       $addFields: { 
         totalDuration: {
@@ -50,11 +34,9 @@ router.get("/api/workouts/range", (req, res) => {
         }
       }
     },
-    { $sort : {day: 1} },
+    { $sort: {day: 1} },
   ])
   .then(dbWorkout => {
-    console.log("/api/workouts .then");
-    console.log(dbWorkout);
     res.json(dbWorkout);
   })
   .catch(err => {
@@ -88,6 +70,6 @@ router.put("/api/workouts/:id", ({ body, params }, res) => {
 });
 
 // TODO
-// Write .delete route here
+// Write .delete route here?
 
 module.exports = router;
