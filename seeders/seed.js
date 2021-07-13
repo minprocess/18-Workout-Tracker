@@ -2,11 +2,15 @@ const mongoose = require('mongoose');
 const db = require('../models/workout.js');
 
 // workout is the database name
-mongoose.connect('mongodb://localhost/workoutdb', {
-  useNewUrlParser: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  process.env.MONGODB_URI || 'mongodb://localhost/workoutdb',
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  }
+);
 
 const workoutSeed = [
   {
